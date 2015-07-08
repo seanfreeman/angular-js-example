@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="jquery-1.11.3.js"></script>
+    <script src="angular.js"></script>
+    <script src="JavaScript.js"></script>
+
+    <link href="StyleSheet.css" rel="stylesheet" />
+</head>
+<body>
+    <div ng-app="myapp" ng-controller="controller">
+
+        <header>
+            <div class="menu selected" id="storemenu" ng-click="storepageselected = true">Store</div>
+            <div class="menu"  id="checkoutmenu" ng-click="storepageselected = false" id="checkoutmenu">Cart ( {{ addedItems}} )</div>
+        </header>
+
+        <section  ng-show="storepageselected">
+
+            <div>
+                <div class="item" ng-repeat="x in items">
+                    <img src="{{ x.imgsrc }}" />
+                    <div> {{ x.name }}</div>
+                    <div>{{ x.price | currency }}</div>
+                    <button ng-hide=" x.addedtocart" ng-click="addtocartclick($index);" data-index="{{$index}}" class="addtocartbutton"> + Add to cart</button>
+<button ng-disabled="x.addedtocart" ng-show="x.addedtocart"> added to cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section ng-show="(!storepageselected)">
+            <table ng-show="(addedItems !=0)">
+                <tr>
+                <td>
+                    <b> Name of the product</b>
+                </td>
+                    <td>
+                        <b>  price</b>
+                    </td>
+                    <td>
+                        <b>quantity</b>
+                    </td>
+                    <td>
+                        <b>Total Price</b>
+                    </td>
+  <td>
+                        <b>Remove from cart</b>
+                    </td>
+               </tr>
+                <tr  ng-if="!(addedItems == 0)" ng-repeat="x in items">
+                    <td ng-show="x.addedtocart"> {{ x.name }}</td>
+                    <td ng-show="x.addedtocart">{{ x.price | currency }}</td>
+                    <td ng-show="x.addedtocart"><input type="number" min="1" max="100"  ng-model="x.quantity"/>  </td>
+                    <td ng-show="x.addedtocart">{{ (x.quantity * x.price) | currency}}</td>
+		    <td ng-show="x.addedtocart"> <button ng-click="removefromcartclick($index);" style="color:red"> X remove </button></td>
+                </tr>
+            </table>
+<div ng-show="addedItems == 0"><b>no items have been added. Please add items from store.</b></div>
+<div ng-if = "!(addedItems == 0)">
+<button>procede to pay</button>
+</div>
+
+        </section>
+    </div>
+    <script>
+        // lets just say we got 10 items available on store to be purchased. 
+        // These 10 items can be added to cart. 
+
+        var itemsAdded = 0;
+        var storepageselected = true;
+      
+        var items = [
+            {
+                name: "Iphone 6",
+                price: 700,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/iphone6.jpeg",
+		type:"smartphone"
+            },
+{
+                name: "Lenovo A6000",
+                price: 200,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/lenovo.jpg",
+type:"smartphone"
+            },{
+                name: "Sony Experia",
+                price: 300,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/sony.jpeg",
+type:"smartphone"
+            },{
+                name: "HTC one desire",
+                price: 300,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/htc.jpeg",
+type:"smartphone"
+            },{
+                name: "Samsung Duos",
+                price: 300,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/samsung.jpeg",
+type:"smartphone"
+            },
+
+ {
+                name: "Ipad",
+                price: 800,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/ipad.jpeg",
+type:"tablet"
+            }
+,
+
+ {
+                name: "Moto E",
+                price: 100,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/motoe.jpeg",
+type:"tablet"
+            },
+
+ {
+                name: "Moto G",
+                price: 200,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/motog.jpeg",
+type:"tablet"
+            },
+
+ {
+                name: "Redmmi 2",
+                price: 200,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/redmi2.jpeg",
+type:"tablet"
+            }
+,
+
+ {
+                name: "Samsung s6",
+                price: 500,
+                addedtocart: false,
+                quantity: 1,
+                imgsrc: "images/s6.jpeg",
+type:"tablet"
+            }
+
+        ];
+
+
+        var myapp = angular.module("myapp", []);
+
+        myapp.controller("controller", function ($scope) {
+            $scope.items = items;
+            $scope.addedItems = itemsAdded;
+            $scope.storepageselected = storepageselected;
+            $scope.addtocartclick = function (index) {
+                items[index].addedtocart = true;
+$scope.addedItems = $scope.addedItems + 1;
+            };
+            $scope.removefromcartclick=function(index){
+ items[index].addedtocart = false;
+$scope.addedItems = $scope.addedItems - 1;
+};
+        });
+document.getElementById("storemenu").onclick=function(){
+
+$("#checkoutmenu").removeClass("selected");
+$(this).addClass("selected");
+};
+document.getElementById("checkoutmenu").onclick=function(){
+$("#storemenu").removeClass("selected");
+$(this).addClass("selected");
+};
+    </script>
+</body>
+</html>
